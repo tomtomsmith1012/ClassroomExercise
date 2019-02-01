@@ -9,7 +9,7 @@ import javax.ws.rs.Path;
 
 import com.smith.tomtom.business.service.ClassroomService;
 
-@Path("/Classroom")
+@Path("/classroom")
 public class ClassroomEndpoint {
 
 	@Inject
