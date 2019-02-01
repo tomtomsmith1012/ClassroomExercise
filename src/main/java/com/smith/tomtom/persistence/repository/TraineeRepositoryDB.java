@@ -3,10 +3,13 @@ package com.smith.tomtom.persistence.repository;
 import static javax.transaction.Transactional.TxType.REQUIRED; 
 import static javax.transaction.Transactional.TxType.SUPPORTS;
 
+import java.util.List;
+
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
@@ -24,8 +27,10 @@ public class TraineeRepositoryDB implements TraineeRepository{
 	private JSONUtil json;
 
 	public String getAllTrainees() {
-		TypedQuery<Trainee> query = em.createQuery("SELECT a FROM Trainee a", Trainee.class);
-		return json.getJSONForObject(query.getResultList());
+		Query query = em.createQuery("SELECT a FROM Trainee a");
+		@SuppressWarnings("unchecked")
+		List<Trainee> querya = query.getResultList();
+		return json.getJSONForObject(querya);
 	}
 
 	@Transactional(REQUIRED)
@@ -40,7 +45,8 @@ public class TraineeRepositoryDB implements TraineeRepository{
 		TypedQuery<Trainee> query = em.createQuery("DELETE a FROM Trainee a WHERE a.id = " + id, Trainee.class);
 		return json.getJSONForObject(query.getResultList());
 	}
-
+	
+	@Transactional(REQUIRED)
 	public String updateTrainee(int id, String jsonString) {
 		Trainee trainee = json.getObjectForJSON(jsonString, Trainee.class);
 		TypedQuery<Trainee> query = em.createQuery("DELETE a FROM Trainee a WHERE a.id = " + id, Trainee.class);
